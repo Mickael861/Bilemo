@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     collectionOperations={
  *          "get"
- *      }
+ *      } 
  * )
  */
 class Product
