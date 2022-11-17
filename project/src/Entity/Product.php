@@ -20,7 +20,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     collectionOperations={
  *          "get"
- *      }
+ *      },
+ *      paginationItemsPerPage=3,
+ *      maximumItemsPerPage=5,
+ *      paginationClientItemsPerPage=true
  * )
  */
 class Product
