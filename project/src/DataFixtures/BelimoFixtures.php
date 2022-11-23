@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Product;
+use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
@@ -21,6 +22,17 @@ class BelimoFixtures extends Fixture
             
             $manager->persist($product);
         }
+
+        $user = new User();
+        $user
+            ->setEmail("user@email.fr")
+            ->setFirstname("Mickael")
+            ->setLastname("Freaks")
+            ->setName("Leclerc")
+            ->setAddress("45 avenue de la joconde")
+            ->setPassword('$2y$13$Y6nUOpQpHcUG8m7CFYyXQu456QbN34B.6S0w4XtFkfdxAZXpKc2LW'); //user@email.fr
+
+        $manager->persist($user);
 
         $manager->flush();
     }
