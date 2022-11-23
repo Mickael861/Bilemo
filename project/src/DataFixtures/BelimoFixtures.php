@@ -2,13 +2,22 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Product;
 use App\Entity\User;
+use App\Entity\Product;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class BelimoFixtures extends Fixture
 {
+    private $hasher;
+
+    public function __construct(UserPasswordHasherInterface $hasher)
+    {
+        $this->hasher = $hasher;
+    }
+
+    
     public function load(ObjectManager $manager): void
     {
         for($i = 1; $i <= 25; $i++) {
@@ -24,13 +33,20 @@ class BelimoFixtures extends Fixture
         }
 
         $user = new User();
+
+        $hashedPassword = $this->hasher->hashPassword(
+            $user,
+            "user@email.fr"
+        );
+
         $user
             ->setEmail("user@email.fr")
+            ->setRoles(['ROLE_USER'])
             ->setFirstname("Mickael")
             ->setLastname("Freaks")
             ->setName("Leclerc")
             ->setAddress("45 avenue de la joconde")
-            ->setPassword('$2y$13$Y6nUOpQpHcUG8m7CFYyXQu456QbN34B.6S0w4XtFkfdxAZXpKc2LW'); //user@email.fr
+            ->setPassword($hashedPassword);
 
         $manager->persist($user);
 
