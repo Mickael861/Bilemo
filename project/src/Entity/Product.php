@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          "get"
  *     },
  *     normalizationContext={
- *          "groups"={"read:collection"}
+ *          "groups"={"read:product"}
  *     },
  *     collectionOperations={
  *          "get"
@@ -33,49 +33,49 @@ class Product
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * 
-     * @Groups({"read:collection"})
+     * @Groups({"read:product"})
      */
     private $product_id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * 
-     * @Groups({"read:collection"})
+     * @Groups({"read:product"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
      * 
-     * @Groups({"read:collection"})
+     * @Groups({"read:product"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="float")
      * 
-     * @Groups({"read:collection"})
+     * @Groups({"read:product"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="integer")
      * 
-     * @Groups({"read:collection"})
+     * @Groups({"read:product"})
      */
     private $stock;
 
     /**
      * @ORM\Column(type="datetime")
      * 
-     * @Groups({"read:collection"})
+     * @Groups({"read:product"})
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime")
      * 
-     * @Groups({"read:collection"})
+     * @Groups({"read:product"})
      */
     private $updated_at;
 
