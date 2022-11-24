@@ -33,12 +33,6 @@ class BelimoFixtures extends Fixture
         }
 
         $user = new User();
-
-        $hashedPassword = $this->hasher->hashPassword(
-            $user,
-            "user@email.fr"
-        );
-
         $user
             ->setEmail("user@email.fr")
             ->setRoles(['ROLE_USER'])
@@ -46,8 +40,18 @@ class BelimoFixtures extends Fixture
             ->setLastname("Freaks")
             ->setName("Leclerc")
             ->setAddress("45 avenue de la joconde")
-            ->setPassword($hashedPassword);
+            ->setPassword($this->hasher->hashPassword($user, "user@email.fr"));
+        $manager->persist($user);
 
+        $user = new User();
+        $user
+            ->setEmail("admin@email.fr")
+            ->setRoles(['ROLE_ADMIN'])
+            ->setFirstname("Georges")
+            ->setLastname("Franks")
+            ->setName("Auchan")
+            ->setAddress("45 avenue de la Monay")
+            ->setPassword($this->hasher->hashPassword($user, "admin@email.fr"));
         $manager->persist($user);
 
         $manager->flush();

@@ -23,7 +23,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      },
  *      paginationItemsPerPage=3,
  *      maximumItemsPerPage=5,
- *      paginationClientItemsPerPage=true
+ *      paginationClientItemsPerPage=true,
+ *      security="is_granted('ROLE_ADMIN')"
  * )
  */
 class Product
