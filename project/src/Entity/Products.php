@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProductsRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ProductsRepository::class)

@@ -2,11 +2,34 @@
 
 namespace App\Entity;
 
-use App\Repository\ClientUserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ClientUserRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ClientUserRepository::class)
+ * 
+ * @ApiResource(
+ *     itemOperations={
+ *          "get",
+ *          "delete"
+ *     },
+ *     normalizationContext={
+ *          "groups"={"read:client"}
+ *     },
+*     denormalizationContext={
+ *          "groups"={"create:clientUser"}
+ *     },
+ *     collectionOperations={
+ *          "get",
+ *          "post"
+ *      },
+ *      paginationItemsPerPage=3,
+ *      maximumItemsPerPage=5,
+ *      paginationClientItemsPerPage=true
+ * )
  */
 class ClientUser
 {
@@ -14,36 +37,70 @@ class ClientUser
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * 
+     * @Groups({"read:client"})
      */
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="clientUsers")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="clientUsers", cascade={"persist"})
+     * 
+     * @Groups({"read:client", "create:clientUser"})
      */
     private $user;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 15,
+     *      minMessage = "Le prénom est trop court, {{ limit }} caractéres minimum",
+     *      maxMessage = "Le prénom est trop long, {{ limit }} caractéres maximum"
+     * )
+     * 
+     * @Groups({"read:client", "create:clientUser"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 15,
+     *      minMessage = "Le nom est trop court, {{ limit }} caractéres minimum",
+     *      maxMessage = "Le nom est trop long, {{ limit }} caractéres maximum"
+     * )
+     * 
+     * @Groups({"read:client", "create:clientUser"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @Assert\NotBlank
+     * @Assert\Email(
+     *     message = "L'email '{{ value }}' n'est pas valide"
+     * )
+     * @Groups({"read:client", "create:clientUser"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="datetime")
+     * 
+     * @Groups({"read:client"})
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime")
+     * 
+     * @Groups({"read:client"})
      */
     private $updated_at;
 
@@ -53,7 +110,7 @@ class ClientUser
         $this->created_at = new \Datetime();
         $this->updated_at = new \DateTime();
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;

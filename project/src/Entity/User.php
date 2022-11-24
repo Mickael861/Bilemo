@@ -2,15 +2,30 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * 
+ * @ApiResource(
+ *     collectionOperations={
+ *          "get"
+ *      },
+ *     itemOperations={
+ *          "get"
+ *     }
+ *      paginationItemsPerPage=3,
+ *      maximumItemsPerPage=5,
+ *      paginationClientItemsPerPage=true,
+ *      security="is_granted('ROLE_ADMIN')"
+ * )
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -39,31 +54,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @Groups({"read:client", "create:clientUser"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     * 
+     * @Groups({"read:client"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @Groups({"read:client"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @Groups({"read:client"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="datetime")
+     * 
+     * @Groups({"read:client"})
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime")
+     * 
+     * @Groups({"read:client"})
      */
     private $updated_at;
 
