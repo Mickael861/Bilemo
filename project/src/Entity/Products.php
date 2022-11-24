@@ -2,14 +2,11 @@
 
 namespace App\Entity;
 
-use DateTime;
+use App\Repository\ProductsRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ProductRepository;
-use ApiPlatform\Core\Annotation\ApiResource;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass=ProductRepository::class)
+ * @ORM\Entity(repositoryClass=ProductsRepository::class)
  * 
  * @ApiResource(
  *     itemOperations={
@@ -27,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      security="is_granted('ROLE_ADMIN')"
  * )
  */
-class Product
+class Products
 {
     /**
      * @ORM\Id
@@ -36,7 +33,7 @@ class Product
      * 
      * @Groups({"read:product"})
      */
-    private $product_id;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -83,13 +80,13 @@ class Product
     public function __construct()
     {
         date_default_timezone_set('Europe/Paris');
-        $this->created_at = new DateTime();
-        $this->updated_at = new DateTime();
+        $this->created_at = new \Datetime();
+        $this->updated_at = new \DateTime();
     }
 
-    public function getProductId(): ?int
+    public function getId(): ?int
     {
-        return $this->product_id;
+        return $this->id;
     }
 
     public function getName(): ?string

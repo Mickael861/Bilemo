@@ -2,16 +2,15 @@
 
 namespace App\Entity;
 
-use DateTime;
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
-use ApiPlatform\Core\Annotation\ApiResource;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * 
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -28,26 +27,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=180)
-     */
-    private $name;
-
-    /**
-     * @ORM\Column(type="string", length=180)
-     */
-    private $firstname;
-
-    /**
-     * @ORM\Column(type="string", length=180)
-     */
-    private $lastname;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $address;
-
-    /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -59,6 +38,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $address;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastname;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $created_at;
@@ -68,11 +67,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $updated_at;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ClientUser::class, mappedBy="user")
+     */
+    private $clientUsers;
+
     public function __construct()
     {
+        $this->clientUsers = new ArrayCollection();
+
         date_default_timezone_set('Europe/Paris');
-        $this->created_at = new DateTime();
-        $this->updated_at = new DateTime();
+        $this->created_at = new \Datetime();
+        $this->updated_at = new \DateTime();
     }
 
     public function getId(): ?int
@@ -164,82 +170,50 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * Get the value of name
-     */ 
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * Set the value of name
-     *
-     * @return  self
-     */ 
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get the value of firstname
-     */ 
-    public function getFirstname()
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getFirstname(): ?string
     {
         return $this->firstname;
     }
 
-    /**
-     * Set the value of firstname
-     *
-     * @return  self
-     */ 
-    public function setFirstname($firstname)
+    public function setFirstname(string $firstname): self
     {
         $this->firstname = $firstname;
 
         return $this;
     }
 
-    /**
-     * Get the value of lastname
-     */ 
-    public function getLastname()
+    public function getLastname(): ?string
     {
         return $this->lastname;
     }
 
-    /**
-     * Set the value of lastname
-     *
-     * @return  self
-     */ 
-    public function setLastname($lastname)
+    public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of address
-     */ 
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * Set the value of address
-     *
-     * @return  self
-     */ 
-    public function setAddress($address)
-    {
-        $this->address = $address;
 
         return $this;
     }
@@ -264,6 +238,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUpdatedAt(\DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ClientUser>
+     */
+    public function getClientUsers(): Collection
+    {
+        return $this->clientUsers;
+    }
+
+    public function addClientUser(ClientUser $clientUser): self
+    {
+        if (!$this->clientUsers->contains($clientUser)) {
+            $this->clientUsers[] = $clientUser;
+            $clientUser->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClientUser(ClientUser $clientUser): self
+    {
+        if ($this->clientUsers->removeElement($clientUser)) {
+            // set the owning side to null (unless already changed)
+            if ($clientUser->getUser() === $this) {
+                $clientUser->setUser(null);
+            }
+        }
 
         return $this;
     }
