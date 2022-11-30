@@ -2,93 +2,93 @@
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ProductRepository;
+use App\Repository\ProductsRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass=ProductRepository::class)
+ * @ORM\Entity(repositoryClass=ProductsRepository::class)
  * 
  * @ApiResource(
  *     itemOperations={
  *          "get"
  *     },
  *     normalizationContext={
- *          "groups"={"read:collection"}
+ *          "groups"={"read:product"}
  *     },
  *     collectionOperations={
  *          "get"
  *      },
  *      paginationItemsPerPage=3,
  *      maximumItemsPerPage=5,
- *      paginationClientItemsPerPage=true
+ *      paginationClientItemsPerPage=true,
+ *      security="is_granted('ROLE_ADMIN')"
  * )
  */
-class Product
+class Products
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * 
-     * @Groups({"read:collection"})
+     * @Groups({"read:product"})
      */
-    private $product_id;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * 
-     * @Groups({"read:collection"})
+     * @Groups({"read:product"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
      * 
-     * @Groups({"read:collection"})
+     * @Groups({"read:product"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="float")
      * 
-     * @Groups({"read:collection"})
+     * @Groups({"read:product"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="integer")
      * 
-     * @Groups({"read:collection"})
+     * @Groups({"read:product"})
      */
     private $stock;
 
     /**
      * @ORM\Column(type="datetime")
      * 
-     * @Groups({"read:collection"})
+     * @Groups({"read:product"})
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime")
      * 
-     * @Groups({"read:collection"})
+     * @Groups({"read:product"})
      */
     private $updated_at;
 
     public function __construct()
     {
         date_default_timezone_set('Europe/Paris');
-        $this->created_at = new DateTime();
-        $this->updated_at = new DateTime();
+        $this->created_at = new \Datetime();
+        $this->updated_at = new \DateTime();
     }
 
-    public function getProductId(): ?int
+    public function getId(): ?int
     {
-        return $this->product_id;
+        return $this->id;
     }
 
     public function getName(): ?string
