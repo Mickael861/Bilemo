@@ -20,11 +20,11 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
  *      },
  *     itemOperations={
  *          "get"
- *     }
- *      paginationItemsPerPage=3,
- *      maximumItemsPerPage=5,
- *      paginationClientItemsPerPage=true,
- *      security="is_granted('ROLE_ADMIN')"
+ *     },
+ *     paginationItemsPerPage=3,
+ *     maximumItemsPerPage=5,
+ *     paginationClientItemsPerPage=true,
+ *     security="is_granted('ROLE_ADMIN')"
  * )
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -55,7 +55,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * 
-     * @Groups({"read:client", "create:clientUser"})
+     * @Groups({"read:client"})
      */
     private $name;
 

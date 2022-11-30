@@ -5,11 +5,14 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ClientUserRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\ClientUsersCreateController;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=ClientUserRepository::class)
+ * @UniqueEntity("email", message = "L'email pour cet utilisateur existe déjà")
  * 
  * @ApiResource(
  *     itemOperations={
@@ -24,11 +27,19 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  *     collectionOperations={
  *          "get",
- *          "post"
+ *          "create_client_users"={
+ *              "method" : "POST",
+ *              "path" : "/client_users",
+ *              "controller" : ClientUsersCreateController::class,
+ *              "openapi_context":{
+ *                  "summary" : "Client creation"
+ *              }
+ *          }
  *      },
  *      paginationItemsPerPage=3,
  *      maximumItemsPerPage=5,
- *      paginationClientItemsPerPage=true
+ *      paginationClientItemsPerPage=true,
+ *      security="is_granted('ROLE_ADMIN')"
  * )
  */
 class ClientUser
@@ -45,7 +56,7 @@ class ClientUser
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="clientUsers", cascade={"persist"})
      * 
-     * @Groups({"read:client", "create:clientUser"})
+     * @Groups({"read:client"})
      */
     private $user;
 
