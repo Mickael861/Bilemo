@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
+use ApiPlatform\Core\Action\NotFoundAction;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -15,11 +16,16 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * 
  * @ApiResource(
- *     collectionOperations={
- *          "get"
- *      },
+ *     collectionOperations={},
  *     itemOperations={
- *          "get"
+ *         "get"={
+ *              "controller":NotFoundAction::class,
+ *              "openapi_context" = {
+ *                  "summary" : "hidden"
+ *              },
+ *              "read":false,
+ *              "output":false
+ *          }
  *     },
  *     paginationItemsPerPage=3,
  *     maximumItemsPerPage=5,
