@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 use App\Repository\ClientUserRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\ListClientsUserController;
 use App\Controller\ClientUsersCreateController;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups as GroupsApip;
 
 /**
  * @ORM\Entity(repositoryClass=ClientUserRepository::class)
@@ -16,7 +18,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * 
  * @ApiResource(
  *     itemOperations={
- *          "get",
+ *          "get"={
+ *              "path":"/clientUsers/{id}"
+ *          },
  *          "delete"
  *     },
  *     normalizationContext={
@@ -26,10 +30,17 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *          "groups"={"create:clientUser"}
  *     },
  *     collectionOperations={
- *          "get",
+  *          "list_client_user"={
+ *              "method" : "GET",
+ *              "path" : "/clientUsers/user",
+ *              "controller" : ListClientsUserController::class,
+ *              "openapi_context":{
+ *                  "summary" : "list clients user"
+ *              }
+ *          },
  *          "create_client_users"={
  *              "method" : "POST",
- *              "path" : "/client_users",
+ *              "path" : "/clientUsers",
  *              "controller" : ClientUsersCreateController::class,
  *              "openapi_context":{
  *                  "summary" : "Client creation"
@@ -50,6 +61,7 @@ class ClientUser
      * @ORM\Column(type="integer")
      * 
      * @Groups({"read:client"})
+     * @GroupsApip({"read:client"})
      */
     private $id;
 
@@ -57,6 +69,7 @@ class ClientUser
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="clientUsers", cascade={"persist"})
      * 
      * @Groups({"read:client"})
+     * @GroupsApip({"read:client"})
      */
     private $user;
 
@@ -72,6 +85,7 @@ class ClientUser
      * )
      * 
      * @Groups({"read:client", "create:clientUser"})
+     * @GroupsApip({"read:client"})
      */
     private $firstname;
 
@@ -87,6 +101,7 @@ class ClientUser
      * )
      * 
      * @Groups({"read:client", "create:clientUser"})
+     * @GroupsApip({"read:client"})
      */
     private $lastname;
 
@@ -98,6 +113,7 @@ class ClientUser
      *     message = "L'email '{{ value }}' n'est pas valide"
      * )
      * @Groups({"read:client", "create:clientUser"})
+     * @GroupsApip({"read:client"})
      */
     private $email;
 
@@ -105,6 +121,7 @@ class ClientUser
      * @ORM\Column(type="datetime")
      * 
      * @Groups({"read:client"})
+     * @GroupsApip({"read:client"})
      */
     private $created_at;
 
@@ -112,6 +129,7 @@ class ClientUser
      * @ORM\Column(type="datetime")
      * 
      * @Groups({"read:client"})
+     * @GroupsApip({"read:client"})
      */
     private $updated_at;
 
