@@ -8,8 +8,9 @@ use ApiPlatform\Core\Action\NotFoundAction;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups as GroupsApip;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
@@ -39,6 +40,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * 
+     * @Groups({"read:client"})
+     * @GroupsApip({"read:client"})
      */
     private $id;
 
@@ -60,43 +64,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * 
-     * @Groups({"read:client"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
-     * 
-     * @Groups({"read:client"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * 
-     * @Groups({"read:client"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * 
-     * @Groups({"read:client"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="datetime")
-     * 
-     * @Groups({"read:client"})
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime")
-     * 
-     * @Groups({"read:client"})
      */
     private $updated_at;
 
