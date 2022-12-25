@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\ClientUser;
 use JMS\Serializer\SerializerInterface;
-use App\Repository\ClientUserRepository;
 use JMS\Serializer\SerializationContext;
+use App\Repository\ClientUserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,7 +19,7 @@ class ListClientsUserController extends AbstractController
          * @var Users $user
          */
         $adminUser = $this->getUser();
-
+        
         $clients = $clientUserRepository->findBy(["user" => $adminUser]);
 
         $context = SerializationContext::create()->setGroups(["read:client"]);
