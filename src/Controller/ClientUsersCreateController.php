@@ -6,7 +6,7 @@ use App\Entity\ClientUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -18,6 +18,8 @@ class ClientUsersCreateController extends AbstractController
         $entityClientUser = $serializer->deserialize($request->getContent(), ClientUser::class, 'json');
 
         $entityClientUser->setUser($adminUser);
+        $entityClientUser->setUpdatedAt(new \DateTime);
+        $entityClientUser->setCreatedAt(new \DateTime);
 
         $errors = $validator->validate($entityClientUser);
         if ($errors->count() > 0) {
