@@ -3,4 +3,8 @@
 #    controller: App\Controller\DefaultController::index
 
 api_login_check:
-    path: /api/login
+    path: /login
+
+api_doc:
+    path: /api/doc
+    controller: api_platform.swagger_ui.action

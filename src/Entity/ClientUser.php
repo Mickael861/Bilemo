@@ -7,10 +7,11 @@ use JMS\Serializer\Annotation\Groups;
 use App\Repository\ClientUserRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\ListClientsUserController;
-use App\Controller\ClientUsersCreateController;
+use App\Controller\ClientUserCreateController;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups as GroupsApip;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * @ORM\Entity(repositoryClass=ClientUserRepository::class)
@@ -41,7 +42,7 @@ use Symfony\Component\Serializer\Annotation\Groups as GroupsApip;
  *          "create_client_users"={
  *              "method" : "POST",
  *              "path" : "/clientUsers",
- *              "controller" : ClientUsersCreateController::class,
+ *              "controller" : ClientUserCreateController::class,
  *              "openapi_context":{
  *                  "summary" : "Client creation"
  *              }
@@ -51,6 +52,33 @@ use Symfony\Component\Serializer\Annotation\Groups as GroupsApip;
  *      maximumItemsPerPage=5,
  *      paginationClientItemsPerPage=true,
  *      security="is_granted('ROLE_ADMIN')"
+ * )
+ * 
+ * @Hateoas\Relation(
+ *      "create",
+ *      href = @Hateoas\Route(
+ *          "/clientUsers",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      )
+ * )
+ * 
+ * @Hateoas\Relation(
+ *      "delete",
+ *      href = @Hateoas\Route(
+ *          "/client_users/[id}",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      )
+ * )
+ * 
+ * @Hateoas\Relation(
+ *      "read",
+ *      href = @Hateoas\Route(
+ *          "/clientUsers/{id}",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      )
  * )
  */
 class ClientUser
@@ -67,9 +95,6 @@ class ClientUser
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="clientUsers", cascade={"persist"})
-     * 
-     * @Groups({"read:client"})
-     * @GroupsApip({"read:client"})
      */
     private $user;
 
