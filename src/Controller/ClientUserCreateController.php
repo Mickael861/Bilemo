@@ -10,7 +10,7 @@ use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ClientUsersCreateController extends AbstractController
+class ClientUserCreateController extends AbstractController
 {
     public function __invoke(SerializerInterface $serializer, Request $request, EntityManagerInterface $managerInterface, ValidatorInterface $validator): JsonResponse
     {
